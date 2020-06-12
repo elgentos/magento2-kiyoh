@@ -1,0 +1,42 @@
+<?php
+/**
+ * Copyright © 2015 Magento. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php
+if($this->getCorrectData()):
+    $rating_percentage = $this->getRatingPercentage();
+    $maxrating = $this->getMaxrating();
+    $url = $this->getMicrodataUrl();
+    $rating = $this->getRating();
+    $reviews = $this->getReviews();
+    $display = 'display:none;';
+    if($this->getShowRating()){
+        $display = 'display:block;';
+    }
+    ?>
+
+    <div class="kiyoh-shop-snippets" style="<?php echo $display?>">
+        <div class="latest-review">
+            <div class="rating-rating">
+                <strong>Wietze</strong> "Bestelling stond keur klaar na online bestellen. De gebakjes zagen er prachtig uit en smaakten net zo lekker als ze eruit zagen."
+            </div>
+            <div class="rating-date">
+                11 Okt. 2017
+            </div>
+            <div class="rating-box">
+                <div class="rating" style="width:<?php echo $rating_percentage;?>%"></div>
+            </div>
+        </div>
+        <span>
+            <a href="<?php echo $url;?>" target="_blank">
+                <?php echo __('View all reviews') ?>
+            </a>
+        </span>
+    </div>
+<?php endif;
+

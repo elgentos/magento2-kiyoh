@@ -1,0 +1,37 @@
+<?php
+/** @var \Elgentos\Kiyoh\ViewModel\Kiyoh $kiyoh */
+$kiyoh = $block->getData('kiyoh');
+?>
+<?php
+if($kiyoh->getReviewCount()):
+
+
+    $maxRating = $kiyoh->getMaxRating();
+    $rating = $kiyoh->getRating();
+
+    $ratingPercentage = $kiyoh->getRatingPercentage();
+    $kiyohUrl = $kiyoh->getKiyohCustomerUrl();
+
+    $reviewCount = $kiyoh->getReviewCount();
+    ?>
+
+    <div class="kiyoh-shop-snippets">
+        <div class="overall-rating">
+            <span itemprop="ratingValue"><?php echo $rating;?></span>
+        </div>
+        <div class="rating-box">
+            <div class="rating" style="width:<?php echo $ratingPercentage;?>%"></div>
+        </div>
+        <div class="kiyoh-schema" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+            <div itemprop="aggregateRating" itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
+                <meta itemprop="bestRating" content="<?php echo $maxRating;?>">
+                <p>
+                    <a href="<?php echo $kiyohUrl ;?>" target="_blank" class="kiyoh-link">
+                        <span><?php echo $reviewCount . ' ' . __('reviews')?></span>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </div>
+<?php endif;
+

@@ -1,0 +1,97 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <tab id="kiyoh" sortOrder="110" translate="label">
+            <label>Kiyoh Extensions</label>
+        </tab>
+        <section id="kiyoh_settings" translate="label" type="text" sortOrder="1" showInDefault="1" showInWebsite="0" showInStore="0">
+            <class>separator-top</class>
+            <label>Kiyoh Settings</label>
+            <tab>kiyoh</tab>
+            <resource>Elgentos_Kiyoh::config</resource>
+            <group id="general" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>General</label>
+                <attribute type="expanded">1</attribute>
+                <field id="enable"
+                       translate="label"
+                       type="select"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0" sortOrder="10">
+                    <label>Enable extension</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="send_data_to_kiyoh"
+                       translate="label"
+                       type="select"
+                       showInDefault="1"
+                       showInWebsite="0"
+                       showInStore="0" sortOrder="10">
+                    <label>Send Data</label>
+                    <comment>Enable send data to kiyoh for reviews</comment>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="email" translate="label tooltip comment" sortOrder="60" type="text" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Company Email</label>
+                    <comment>Enter here your "company email address" as registered in your KiyOh account. Not the "user
+                        email address"!
+                    </comment>
+                </field>
+                <field id="api_key" translate="label tooltip comment" sortOrder="60" type="text" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>API Key</label>
+                    <comment>Enter here the api key</comment>
+                </field>
+                <field id="feed_url" translate="label tooltip comment" sortOrder="60" type="text" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Feed Url</label>
+                    <comment>Enter here the feed URL</comment>
+                </field>
+
+                <field id="kiyoh_external_url" sortOrder="100" type="text" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Kiyoh URL</label>
+                    <comment>Enter here url from your company kiyoh page</comment>
+                </field>
+
+            </group>
+            <group id="review_settings" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Review Settings</label>
+                <attribute type="expanded">1</attribute>
+                <field id="delay" translate="label tooltip comment" sortOrder="70" type="text" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Enter delay</label>
+                    <comment>Enter here the delay(number of days) after which you would like to send review invite email
+                        to your customer. This delay applies after customer event(Shipping/Purchase - to be selected at
+                        next option). You may enter 0 to send review invite email immediately after customer
+                        event(Shipping/Purchase).
+                    </comment>
+                </field>
+
+                <field id="event" translate="label tooltip comment" sortOrder="80" type="select" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Select Event</label>
+                    <comment>Enter here the event after which you would like to send review invite email to your
+                        customer. Enter Shipping if your store sells products that need shipping.
+                    </comment>
+                    <source_model>Elgentos\Kiyoh\Adminhtml\Model\System\Config\Source\Reviewevents</source_model>
+                </field>
+
+                <field id="order_status" translate="label" sortOrder="90" type="multiselect"
+                       showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Order Status</label>
+                    <source_model>Magento\Sales\Model\Config\Source\Order\Status</source_model>
+                </field>
+
+                <field id="exclude_customer_groups" sortOrder="100" type="multiselect" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
+                    <label>Exclude customer groups</label>
+                    <source_model>Magento\Customer\Model\Config\Source\Group</source_model>
+                </field>
+
+            </group>
+        </section>
+    </system>
+</config>

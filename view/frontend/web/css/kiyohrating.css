@@ -1,0 +1,13 @@
+.kiyoh-shop-snippets{display: inline-block}
+.kiyoh-shop-snippets .rating-box{
+    float: left;
+    width: 91px;
+    background: url('../images/rating-sprite.png') no-repeat 0 -15px;
+    height: 15px;
+    margin: 11px 10px 10px 10px;
+}
+.kiyoh-shop-snippets .rating-box .rating{
+    height: 15px;
+    background: url('../images/rating-sprite.png') no-repeat 0 0;
+    margin: 0;padding: 0;
+}

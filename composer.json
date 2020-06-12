@@ -1,0 +1,21 @@
+{
+    "name": "elgentos/kiyoh",
+    "description": "Kiyoh extension to show rating on m2 shop",
+    "type": "magento2-module",
+    "authors": [
+        {
+            "name": "Wouter Steenmeijer",
+            "email": "wouter@elgentos.nl"
+        }
+    ],
+    "minimum-stability": "dev",
+    "autoload": {
+        "psr-4": {
+            "Elgentos\\Kiyoh\\": ""
+        },
+        "files": [
+            "registration.php"
+        ]
+    }
+
+}
