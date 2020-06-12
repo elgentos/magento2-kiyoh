@@ -9,6 +9,15 @@ This extension fetches review scores from Kiyoh and stores them in the m2 databa
 	php bin/magento setup:upgrade
 	php bin/magento setup:static-content:deploy
 
+### Configuration
+
+- Enable the extension
+- Setup an interval number in days
+- Enter the Kiyoh known email adress
+- Enter the Kiyoh API key (only to send data to kiyoh)
+- Enter the feed URL (https://www.kiyoh.com/v1/review/feed.xml?hash=YOURHASHHERE)
+- Enter the url from the public page in kiyoh
+
 ### Run the cronjob
 
 Run the cronjob with magerun2 `magerun2 sys:cron:run retrieve_reviews_from_kiyoh`
@@ -19,3 +28,8 @@ Run the cronjob with magerun2 `magerun2 sys:cron:run retrieve_reviews_from_kiyoh
 - ViewModel to offload logic from a block class
 - Send review email + offset when a shipment is made in m2 (config option)
 - This extension stores the data in Custom Variables in de m2 database
+
+### How does it work
+
+- Gets the xml feed and puts the data in custom vars
+- Has a viewModel that transform this data in the correct form on the frontend
