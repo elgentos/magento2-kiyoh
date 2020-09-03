@@ -5,9 +5,11 @@ This extension fetches review scores from Kiyoh and stores them in the m2 databa
 ### How to install
 
 :rocket:  Install via composer (recommend)
-	composer require elgentos/kiyoh
-	php bin/magento setup:upgrade
-	php bin/magento setup:static-content:deploy
+```
+composer require elgentos/magento2-kiyoh
+bin/magento setup:upgrade
+bin/magento setup:static-content:deploy
+```
 
 ### Configuration
 

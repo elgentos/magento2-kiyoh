@@ -1,5 +1,5 @@
 {
-    "name": "elgentos/kiyoh",
+    "name": "elgentos/magento2-kiyoh",
     "description": "Kiyoh extension to show rating on m2 shop",
     "type": "magento2-module",
     "authors": [
