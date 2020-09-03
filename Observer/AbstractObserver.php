@@ -42,20 +42,20 @@ abstract class AbstractObserver
         $this->storeManager = $storeManager;
     }
 
-    public function isEnabled() {
-        return $this->storeManager->getStore()->getConfig(
+    public function isEnabled($storeId) {
+        return $this->storeManager->getStore($storeId)->getConfig(
             'kiyoh_settings/general/enable'
         );
     }
 
-    public function sendDataToKiyoh() {
-        return $this->storeManager->getStore()->getConfig(
+    public function sendDataToKiyoh($storeId) {
+        return $this->storeManager->getStore($storeId)->getConfig(
             'kiyoh_settings/general/send_data_to_kiyoh'
         );
     }
 
-    public function isCustomerGroupExcluded($order) {
-        $excludedCustomerGroups = $this->storeManager->getStore()->getConfig(
+    public function isCustomerGroupExcluded($storeId, $order) {
+        $excludedCustomerGroups = $this->storeManager->getStore($storeId)->getConfig(
             'kiyoh_settings/review_settings/exclude_customer_groups'
         );
 
@@ -70,17 +70,17 @@ abstract class AbstractObserver
         return false;
     }
 
-    public function getPostVariables($order) {
+    public function getPostVariables($storeId, $order) {
 
-        $kiyohUserEmail = $this->storeManager->getStore()->getConfig(
+        $kiyohUserEmail = $this->storeManager->getStore($storeId)->getConfig(
             'kiyoh_settings/general/email'
         );
 
-        $apiKey = $this->storeManager->getStore()->getConfig(
+        $apiKey = $this->storeManager->getStore($storeId)->getConfig(
             'kiyoh_settings/general/api_key'
         );
 
-        $delay = $this->storeManager->getStore()->getConfig(
+        $delay = $this->storeManager->getStore($storeId)->getConfig(
             'kiyoh_settings/review_settings/delay'
         );
 
