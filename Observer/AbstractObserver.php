@@ -19,12 +19,12 @@ abstract class AbstractObserver
     /**
      * @var StoreManagerInterface
      */
-    private $storeManager;
+    public $storeManager;
 
     /**
      * @var LoggerInterface
      */
-    private $logger;
+    public $logger;
 
     /**
      * AbstractObserver constructor.
@@ -32,7 +32,7 @@ abstract class AbstractObserver
      * @param Curl $curl
      * @param StoreManagerInterface $storeManager
      */
-    private function __construct(
+    public function __construct(
         LoggerInterface $loggerInterface,
         Curl $curl,
         StoreManagerInterface $storeManager

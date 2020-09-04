@@ -8,20 +8,6 @@ use Psr\Log\LoggerInterface;
 
 class SalesOrderShipmentSaveAfter extends AbstractObserver implements ObserverInterface
 {
-    /**
-     * @var LoggerInterface
-     */
-    public $logger;
-
-    /**
-     * SalesOrderShipmentSaveAfter constructor.
-     * @param LoggerInterface $logger
-     */
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
-
     public function execute(Observer $observer)
     {
         $shipment = $observer->getEvent()->getShipment();
