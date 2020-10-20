@@ -83,7 +83,7 @@ class RetrieveReviews {
 
     protected function _saveToDb($data) {
         // save these attributes in custom var DB numberReviews averageRating
-        $ratingCodes = ['numberReviews', 'averageRating'];
+        $ratingCodes = ['numberReviews', 'averageRating', 'percentageRecommendation'];
         foreach ($ratingCodes as $ratingCode) {
             $reviewData = $data->{$ratingCode};
 

@@ -57,11 +57,15 @@ class Kiyoh implements ArgumentInterface
     }
 
     /**
-     * @return float|int
+     * @return bool|Variable|string
      * @throws NoSuchEntityException
      */
     public function getRatingPercentage(){
-        return ($this->getRating() / $this->getMaxRating()) * 100;
+        if(!$this->getVariableValueByCode('kiyoh_percentageRecommendation')){
+            return false;
+        }
+
+        return $this->getVariableValueByCode('kiyoh_percentageRecommendation');
     }
 
     /**
