@@ -2,6 +2,7 @@
 
 namespace Elgentos\Kiyoh\ViewModel;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -9,7 +10,10 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 
-
+/**
+ * Class Kiyoh
+ * @package Elgentos\Kiyoh\ViewModel
+ */
 class Kiyoh implements ArgumentInterface
 {
 
@@ -23,12 +27,25 @@ class Kiyoh implements ArgumentInterface
      */
     private $variable;
 
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * Kiyoh constructor.
+     *
+     * @param StoreManagerInterface       $storeManager
+     * @param VariableFactory             $variableFactory
+     */
     public function __construct(
         StoreManagerInterface $storeManager,
-        VariableFactory $variableFactory
+        VariableFactory $variableFactory,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->storeManager = $storeManager;
         $this->variable = $variableFactory;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -104,5 +121,12 @@ class Kiyoh implements ArgumentInterface
         }
 
         return '';
+    }
+
+    /**
+     * @return mixed
+     */
+    public function isEnabled() {
+        return $this->scopeConfig->getValue('kiyoh_settings/general/enable', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 }
