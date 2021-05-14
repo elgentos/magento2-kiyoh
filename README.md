@@ -1,4 +1,4 @@
-## Elgentos Kiyoh
+## Elgentos Kiyoh for Magento 2
 
 This extension fetches site review scores from Kiyoh and stores them in the m2 database. This is only compatible with KiyohNL. But feel free to open an pr to support kiyoh.com and `klanten vertellen` as well. 
 
