@@ -1,6 +1,8 @@
 ## Elgentos Kiyoh
 
-This extension fetches review scores from Kiyoh and stores them in the m2 database. This is only compatible with KiyohNL. But feel free to open an pr to support kiyoh.com and `klanten vertellen` as well. 
+This extension fetches site review scores from Kiyoh and stores them in the m2 database. This is only compatible with KiyohNL. But feel free to open an pr to support kiyoh.com and `klanten vertellen` as well. 
+
+Note: this extension is used for Kiyoh *site reviews*, not for Kiyoh *product reviews*. For the product reviews extension, see [dutchwebdesign/magento2-kiyoh](https://github.com/dutchwebdesign/magento2-kiyoh).
 
 ### How to install
 
