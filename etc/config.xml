@@ -1,0 +1,21 @@
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <kiyoh_settings>
+            <general>
+                <enable />
+                <send_data_to_kiyoh />
+                <email />
+                <api_key />
+                <feed_url />
+                <kiyoh_external_url />
+            </general>
+            <review_settings>
+                <delay />
+                <event />
+                <order_status />
+                <exclude_customer_groups />
+            </review_settings>
+        </kiyoh_settings>
+    </default>
+</config>
