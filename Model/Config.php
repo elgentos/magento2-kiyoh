@@ -23,7 +23,7 @@ class Config {
     /**
      * @throws NoSuchEntityException
      */
-    public function getApiKey(): string {
+    public function getApiKey(): mixed {
         return $this->storeManager->getStore()->getConfig(
         'kiyoh_settings/general/api_key'
         );
@@ -32,7 +32,7 @@ class Config {
     /**
      * @throws NoSuchEntityException
      */
-    public function getLocationId(): string {
+    public function getLocationId(): mixed {
         return $this->storeManager->getStore()->getConfig(
         'kiyoh_settings/general/location_id'
         );
