@@ -33,8 +33,9 @@ class RetrieveReviews {
      */
     private $variable;
 
-    private $filePath;
+    private $apiKey;
 
+    private $locationId;
 
     public function __construct(
         Context $context,
@@ -50,31 +51,45 @@ class RetrieveReviews {
         $this->log = $logger;
         $this->variable = $variable;
 
-        $this->filePath = $this->getFeedUrl();
+        $this->apiKey = $this->getApiKey();
+        $this->locationId = $this->getLocationId();
     }
 
 
-    public function getFeedUrl(){
+    public function getApiKey(){
         return $this->storeManager->getStore()->getConfig(
-            'kiyoh_settings/general/feed_url'
+            'kiyoh_settings/general/api_key'
         );
     }
 
+    public function getLocationId(){
+        return $this->storeManager->getStore()->getConfig(
+            'kiyoh_settings/general/location_id'
+        );
+    }
+
+
     public function processAggregateScores() {
 
-        $this->curl->get($this->filePath);
-        $output = $this->curl->getBody();
+        if (!$this->getLocationId()) {
+            throw new \Magento\Framework\Exception\CronException(__('Location ID missing, please set your location ID.'));
+        }
 
-        $doc = simplexml_load_string($output);
+        if (!$this->getApiKey()) {
+            throw new \Magento\Framework\Exception\CronException(__('API key missing, please set your API key.'));
+        }
 
-        unset($doc->{'reviews'});
+        $this->curl->addHeader('X-Publication-Api-Token', $this->getApiKey());
+        $this->curl->get('https://www.klantenvertellen.nl/v1/publication/review/external/location/statistics?locationId=' . $this->getLocationId());
+
+        $ouput = $this->curl->getBody();
+        $jsonOutput = json_decode($ouput);
 
         try {
-            if (isset($doc->errorCode)) {
-                throw new \Magento\Framework\Exception\CronException(__('Invalid xml format, code data missing.'));
+            if (isset($jsonOutput->errorCode)) {
+                throw new \Magento\Framework\Exception\CronException(__('Kiyoh API error: ' . $jsonOutput->errorCode . ': ' . $jsonOutput->detailedError[0]->message));
             }
-
-            $this->_saveToDb($doc);
+            $this->_saveToDb($jsonOutput);
 
         } catch (\Exception $e) {
             $this->log->critical($e->getMessage());
@@ -82,8 +97,9 @@ class RetrieveReviews {
     }
 
     protected function _saveToDb($data) {
+
         // save these attributes in custom var DB numberReviews averageRating
-        $ratingCodes = ['numberReviews', 'averageRating', 'percentageRecommendation'];
+        $ratingCodes = ['numberReviews', 'averageRating', 'recommendation'];
         foreach ($ratingCodes as $ratingCode) {
             $reviewData = $data->{$ratingCode};
 

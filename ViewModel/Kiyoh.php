@@ -78,11 +78,11 @@ class Kiyoh implements ArgumentInterface
      * @throws NoSuchEntityException
      */
     public function getRatingPercentage(){
-        if(!$this->getVariableValueByCode('kiyoh_percentageRecommendation')){
+        if(!$this->getVariableValueByCode('kiyoh_recommendation')){
             return false;
         }
 
-        return $this->getVariableValueByCode('kiyoh_percentageRecommendation');
+        return $this->getVariableValueByCode('kiyoh_recommendation');
     }
 
     /**
