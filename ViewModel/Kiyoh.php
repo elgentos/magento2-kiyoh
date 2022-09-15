@@ -19,7 +19,7 @@ class Kiyoh implements ArgumentInterface
     /**
      * @var ScopeInterface
      */
-    private ScopeInterface $storeManager;
+    private $storeManager;
 
     /**
      * @var VariableFactory
@@ -34,9 +34,8 @@ class Kiyoh implements ArgumentInterface
     /**
      * Kiyoh constructor.
      *
-     * @param StoreManagerInterface $storeManager
-     * @param VariableFactory $variableFactory
-     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface       $storeManager
+     * @param VariableFactory             $variableFactory
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -52,8 +51,7 @@ class Kiyoh implements ArgumentInterface
      * @return bool|string
      * @throws NoSuchEntityException
      */
-    public function getReviewCount(): bool|string
-    {
+    public function getReviewCount(){
 
         if(!$this->getVariableValueByCode('kiyoh_numberReviews')){
             return false;
@@ -66,8 +64,7 @@ class Kiyoh implements ArgumentInterface
      * @return bool|string
      * @throws NoSuchEntityException
      */
-    public function getRating(): bool|string
-    {
+    public function getRating(){
 
         if(!$this->getVariableValueByCode('kiyoh_averageRating')){
             return false;
@@ -77,11 +74,10 @@ class Kiyoh implements ArgumentInterface
     }
 
     /**
-     * @return false|string
+     * @return bool|string
      * @throws NoSuchEntityException
      */
-    public function getRatingPercentage(): bool|string
-    {
+    public function getRatingPercentage(){
         if(!$this->getVariableValueByCode('kiyoh_recommendation')){
             return false;
         }
@@ -93,8 +89,7 @@ class Kiyoh implements ArgumentInterface
      * @return mixed
      * @throws NoSuchEntityException
      */
-    public function getKiyohCustomerUrl(): mixed
-    {
+    public function getKiyohCustomerUrl(){
         return $this->storeManager->getStore()->getConfig(
             'kiyoh_settings/general/kiyoh_external_url'
         );
@@ -133,8 +128,7 @@ class Kiyoh implements ArgumentInterface
     /**
      * @return mixed
      */
-    public function isEnabled(): mixed
-    {
-        return $this->scopeConfig->getValue('kiyoh_settings/general/enable', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
+    public function isEnabled() {
+        return $this->scopeConfig->getValue('kiyoh_settings/general/enable', ScopeInterface::SCOPE_STORE);
     }
 }
