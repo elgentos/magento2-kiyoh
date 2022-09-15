@@ -2,13 +2,15 @@
 
 namespace Elgentos\Kiyoh\Model;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
 class Config {
 
-    public $locationId;
-
-    public $apiKey;
+    /**
+     * @var StoreManagerInterface
+     */
+    private StoreManagerInterface $storeManager;
 
     const PUBLICATION_URL = 'https://www.kiyoh.com/v1/publication/review/external/location/statistics?locationId=';
 
@@ -18,13 +20,19 @@ class Config {
         $this->storeManager = $storeManager;
     }
 
-    public function getApiKey() {
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function getApiKey(): string {
         return $this->storeManager->getStore()->getConfig(
         'kiyoh_settings/general/api_key'
         );
     }
 
-    public function getLocationId(){
+    /**
+     * @throws NoSuchEntityException
+     */
+    public function getLocationId(): string {
         return $this->storeManager->getStore()->getConfig(
         'kiyoh_settings/general/location_id'
         );

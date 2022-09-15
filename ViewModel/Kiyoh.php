@@ -7,7 +7,6 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
-use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 
 /**
@@ -20,23 +19,24 @@ class Kiyoh implements ArgumentInterface
     /**
      * @var ScopeInterface
      */
-    private $storeManager;
+    private ScopeInterface $storeManager;
 
     /**
      * @var VariableFactory
      */
-    private $variable;
+    private VariableFactory $variable;
 
     /**
      * @var ScopeConfigInterface
      */
-    private $scopeConfig;
+    private ScopeConfigInterface $scopeConfig;
 
     /**
      * Kiyoh constructor.
      *
-     * @param StoreManagerInterface       $storeManager
-     * @param VariableFactory             $variableFactory
+     * @param StoreManagerInterface $storeManager
+     * @param VariableFactory $variableFactory
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -49,9 +49,11 @@ class Kiyoh implements ArgumentInterface
     }
 
     /**
-     * @return bool|Variable|string
+     * @return bool|string
+     * @throws NoSuchEntityException
      */
-    public function getReviewCount(){
+    public function getReviewCount(): bool|string
+    {
 
         if(!$this->getVariableValueByCode('kiyoh_numberReviews')){
             return false;
@@ -61,10 +63,11 @@ class Kiyoh implements ArgumentInterface
     }
 
     /**
-     * @return bool|Variable|string
+     * @return bool|string
      * @throws NoSuchEntityException
      */
-    public function getRating(){
+    public function getRating(): bool|string
+    {
 
         if(!$this->getVariableValueByCode('kiyoh_averageRating')){
             return false;
@@ -74,10 +77,11 @@ class Kiyoh implements ArgumentInterface
     }
 
     /**
-     * @return bool|Variable|string
+     * @return false|string
      * @throws NoSuchEntityException
      */
-    public function getRatingPercentage(){
+    public function getRatingPercentage(): bool|string
+    {
         if(!$this->getVariableValueByCode('kiyoh_recommendation')){
             return false;
         }
@@ -89,7 +93,8 @@ class Kiyoh implements ArgumentInterface
      * @return mixed
      * @throws NoSuchEntityException
      */
-    public function getKiyohCustomerUrl(){
+    public function getKiyohCustomerUrl(): mixed
+    {
         return $this->storeManager->getStore()->getConfig(
             'kiyoh_settings/general/kiyoh_external_url'
         );
@@ -98,7 +103,8 @@ class Kiyoh implements ArgumentInterface
     /**
      * @return int
      */
-    public function getMaxRating(){
+    public function getMaxRating(): int
+    {
         return 10;
     }
 
@@ -108,7 +114,8 @@ class Kiyoh implements ArgumentInterface
      * @return string
      * @throws NoSuchEntityException
      */
-    public function getVariableValueByCode($code) {
+    public function getVariableValueByCode($code): string
+    {
 
         $customVariable = $this->variable->create()->setStoreId(
             $this->storeManager->getStore()->getId()
@@ -126,7 +133,8 @@ class Kiyoh implements ArgumentInterface
     /**
      * @return mixed
      */
-    public function isEnabled() {
+    public function isEnabled(): mixed
+    {
         return $this->scopeConfig->getValue('kiyoh_settings/general/enable', \Magento\Store\Model\ScopeInterface::SCOPE_STORE);
     }
 }

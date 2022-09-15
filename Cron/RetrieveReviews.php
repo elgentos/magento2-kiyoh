@@ -2,10 +2,9 @@
 
 namespace Elgentos\Kiyoh\Cron;
 
-use Magento\Framework\App\Cron;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\Module\Declaration\Converter\Dom;
-use Magento\Framework\View\Element\Template\Context;
+use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 use \Psr\Log\LoggerInterface;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -17,40 +16,38 @@ class RetrieveReviews {
     /**
      * @var Curl
      */
-    private $curl;
+    private Curl $curl;
 
     /**
      * @var LoggerInterface
      */
-    private $log;
+    private LoggerInterface $log;
 
     /**
      * @var Dom
      */
-    private $converter;
+    private Dom $converter;
 
     /**
      * @var VariableFactory
      */
-    private $variable;
+    private VariableFactory $variable;
 
     /**
      * @var Json
      */
-    private $jsonSerializer;
+    private Json $jsonSerializer;
 
     /**
      * @var Config
      */
-    private $config;
+    private Config $config;
 
     public function __construct(
-        Context $context,
         Curl $curl,
         Json $jsonSerializer,
         LoggerInterface $logger,
         VariableFactory $variable,
-        CronException $cronException,
         Dom $converter,
         Config $config
     ) {
@@ -59,11 +56,14 @@ class RetrieveReviews {
         $this->converter = $converter;
         $this->log = $logger;
         $this->variable = $variable;
-        $this->cronException = $cronException;
         $this->config = $config;
     }
 
-    public function processAggregateScores() {
+    /**
+     * @throws CronException
+     */
+    public function processAggregateScores(): void
+    {
 
         if (!$this->config->getLocationId()) {
             throw new CronException(__('Location ID missing, please set your location ID.'));
@@ -73,9 +73,8 @@ class RetrieveReviews {
             throw new CronException(__('API key missing, please set your API key.'));
         }
 
-        $this->curl->addHeader('X-Publication-Api-Token', $this->getApiKey());
-        $this->curl->get(config::PUBLICATION_URL . $this->getLocationId());
-
+        $this->curl->addHeader('X-Publication-Api-Token', $this->config->getApiKey());
+        $this->curl->get(config::PUBLICATION_URL . $this->config->getLocationId());
 
         $output = $this->curl->getBody();
         $jsonOutput = $this->jsonSerializer->unserialize($output);
@@ -96,6 +95,10 @@ class RetrieveReviews {
         }
     }
 
+    /**
+     * @param $data
+     * @return void
+     */
     protected function saveToDb($data) : void {
         $ratingCodes = ['numberReviews', 'averageRating', 'recommendation'];
         foreach ($ratingCodes as $ratingCode) {
@@ -115,12 +118,7 @@ class RetrieveReviews {
     }
 
 
-    /**
-     * @param $code
-     * @param int $storeId
-     * @return Variable
-     */
-    protected function initVariable($code, $storeId = 0)
+    protected function initVariable($code, int $storeId = 0): Variable
     {
         return $this->variable->create()->setStoreId($storeId)->loadByCode($code)->setCode($code);
     }
