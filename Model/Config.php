@@ -10,6 +10,8 @@ class Config {
 
     public $apiKey;
 
+    const PUBLICATION_URL = 'https://www.kiyoh.com/v1/publication/review/external/location/statistics?locationId=';
+
     public function __construct(
         StoreManagerInterface $storeManager
     ) {
