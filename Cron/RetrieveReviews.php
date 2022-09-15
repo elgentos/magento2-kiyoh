@@ -80,7 +80,7 @@ class RetrieveReviews {
         }
 
         $this->curl->addHeader('X-Publication-Api-Token', $this->getApiKey());
-        $this->curl->get('https://www.klantenvertellen.nl/v1/publication/review/external/location/statistics?locationId=' . $this->getLocationId());
+        $this->curl->get('https://www.kiyoh.com/v1/publication/review/external/location/statistics?locationId=' . $this->getLocationId());
 
         $ouput = $this->curl->getBody();
         $jsonOutput = json_decode($ouput);
