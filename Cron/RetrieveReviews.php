@@ -2,90 +2,85 @@
 
 namespace Elgentos\Kiyoh\Cron;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\HTTP\Client\Curl;
 use Magento\Framework\Module\Declaration\Converter\Dom;
-use Magento\Framework\View\Element\Template\Context;
+use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
 use \Psr\Log\LoggerInterface;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Exception\CronException;
+use Elgentos\Kiyoh\Model\Config;
 
 class RetrieveReviews {
 
-    /**
-     * @var Curl
-     */
-    private $curl;
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-    /**
-     * @var Dom
-     */
-    private $converter;
-
-    /**
-     * @var LoggerInterface
-     */
-    private $log;
-    /**
-     * @var VariableFactory
-     */
-    private $variable;
-
-    private $filePath;
-
+    private Curl $curl;
+    private LoggerInterface $log;
+    private Dom $converter;
+    private VariableFactory $variable;
+    private Json $jsonSerializer;
+    private Config $config;
 
     public function __construct(
-        Context $context,
-        StoreManagerInterface $storeManager,
         Curl $curl,
-        Dom $converter,
+        Json $jsonSerializer,
         LoggerInterface $logger,
-        VariableFactory $variable
+        VariableFactory $variable,
+        Dom $converter,
+        Config $config
     ) {
         $this->curl = $curl;
-        $this->storeManager = $storeManager;
+        $this->jsonSerializer = $jsonSerializer;
         $this->converter = $converter;
         $this->log = $logger;
         $this->variable = $variable;
-
-        $this->filePath = $this->getFeedUrl();
+        $this->config = $config;
     }
 
+    /**
+     * @throws CronException
+     */
+    public function processAggregateScores(): void
+    {
 
-    public function getFeedUrl(){
-        return $this->storeManager->getStore()->getConfig(
-            'kiyoh_settings/general/feed_url'
-        );
-    }
+        if (!$this->config->getLocationId()) {
+            throw new CronException(__('Location ID missing, please set your location ID.'));
+        }
 
-    public function processAggregateScores() {
+        if (!$this->config->getApiKey()) {
+            throw new CronException(__('API key missing, please set your API key.'));
+        }
 
-        $this->curl->get($this->filePath);
+        $this->curl->addHeader('X-Publication-Api-Token', $this->config->getApiKey());
+        $this->curl->get(sprintf(Config::PUBLICATION_URL, $this->config->getLocationId()));
+
         $output = $this->curl->getBody();
-
-        $doc = simplexml_load_string($output);
-
-        unset($doc->{'reviews'});
+        $jsonOutput = $this->jsonSerializer->unserialize($output);
 
         try {
-            if (isset($doc->errorCode)) {
-                throw new \Magento\Framework\Exception\CronException(__('Invalid xml format, code data missing.'));
-            }
+            if (isset($jsonOutput->errorCode)) {
 
-            $this->_saveToDb($doc);
+                throw new CronException( __(
+                    'Kiyoh API error: %1: %2',
+                    $jsonOutput->errorCode,
+                    $jsonOutput->detailedError[0]->message ?? null
+                ));
+            }
+            $this->saveToDb($jsonOutput);
 
         } catch (\Exception $e) {
             $this->log->critical($e->getMessage());
         }
     }
 
-    protected function _saveToDb($data) {
-        // save these attributes in custom var DB numberReviews averageRating
-        $ratingCodes = ['numberReviews', 'averageRating', 'percentageRecommendation'];
+    /**
+     * @param $data
+     * @return void
+     */
+    protected function saveToDb($data) : void {
+        $ratingCodes = ['numberReviews', 'averageRating', 'recommendation'];
         foreach ($ratingCodes as $ratingCode) {
-            $reviewData = $data->{$ratingCode};
+            $reviewData = $data[$ratingCode];
 
             try {
                 $variable = $this->initVariable('kiyoh_' . $ratingCode);
@@ -101,12 +96,7 @@ class RetrieveReviews {
     }
 
 
-    /**
-     * @param $code
-     * @param int $storeId
-     * @return Variable
-     */
-    protected function initVariable($code, $storeId = 0)
+    protected function initVariable($code, int $storeId = 0): Variable
     {
         return $this->variable->create()->setStoreId($storeId)->loadByCode($code)->setCode($code);
     }

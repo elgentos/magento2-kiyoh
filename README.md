@@ -18,8 +18,8 @@ bin/magento setup:static-content:deploy
 - Enable the extension
 - Setup an interval number in days
 - Enter the Kiyoh known email adress
-- Enter the Kiyoh API key (only to send data to kiyoh)
-- Enter the feed URL (https://www.kiyoh.com/v1/review/feed.xml?hash=YOURHASHHERE)
+- Enter the Kiyoh API key 
+- Enter the Kiyoh Location ID
 - Enter the url from the public page in kiyoh
 
 ### Run the cronjob

@@ -1,12 +1,17 @@
 <?php
-/** @var \Elgentos\Kiyoh\ViewModel\Kiyoh $kiyoh */
+/** @var Kiyoh $kiyoh */
+
+use Elgentos\Kiyoh\Model\Config;
+use Elgentos\Kiyoh\ViewModel\Kiyoh;
+
 $kiyoh = $block->getData('kiyoh');
 ?>
+
 <?php
+
 if($kiyoh->getReviewCount() && $kiyoh->isEnabled()):
 
-
-    $maxRating = $kiyoh->getMaxRating();
+    $maxrating = Config::MAX_RATING;
     $rating = $kiyoh->getRating();
 
     $ratingPercentage = $kiyoh->getRatingPercentage();
@@ -24,7 +29,7 @@ if($kiyoh->getReviewCount() && $kiyoh->isEnabled()):
         </div>
         <div class="kiyoh-schema" itemscope="itemscope" itemtype="http://schema.org/WebPage">
             <div itemprop="aggregateRating" itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
-                <meta itemprop="bestRating" content="<?php echo $maxRating;?>">
+                <meta itemprop="bestRating" content="<?php echo $maxrating;?>">
                 <p>
                     <a href="<?php echo $kiyohUrl ;?>" target="_blank" class="kiyoh-link">
                         <span><?php echo $reviewCount . ' ' . __('reviews')?></span>

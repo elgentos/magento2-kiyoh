@@ -44,12 +44,11 @@
                     <label>API Key</label>
                     <comment>Enter here the api key</comment>
                 </field>
-                <field id="feed_url" translate="label tooltip comment" sortOrder="60" type="text" showInDefault="1"
+                <field id="location_id" translate="label tooltip comment" sortOrder="60" type="text" showInDefault="1"
                        showInWebsite="1" showInStore="1">
-                    <label>Feed Url</label>
-                    <comment>Enter here the feed URL</comment>
+                    <label>Location ID</label>
+                    <comment>Enter here the location ID from Kiyoh</comment>
                 </field>
-
                 <field id="kiyoh_external_url" sortOrder="100" type="text" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Kiyoh URL</label>
