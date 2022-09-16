@@ -15,8 +15,6 @@ use Magento\Variable\Model\VariableFactory;
  */
 class Kiyoh implements ArgumentInterface
 {
-    const MAX_RATING = '10';
-
     private StoreManagerInterface $storeManager;
 
     private VariableFactory $variable;
@@ -44,11 +42,8 @@ class Kiyoh implements ArgumentInterface
      * @return bool|string
      * @throws NoSuchEntityException
      */
-    public function getReviewCount(){
-
-        if(!$this->getVariableValueByCode('kiyoh_numberReviews')){
-            return false;
-        }
+    public function getReviewCount(): ?string
+    {
 
         return $this->getVariableValueByCode('kiyoh_numberReviews');
     }
@@ -57,11 +52,8 @@ class Kiyoh implements ArgumentInterface
      * @return bool|string
      * @throws NoSuchEntityException
      */
-    public function getRating(){
-
-        if(!$this->getVariableValueByCode('kiyoh_averageRating')){
-            return false;
-        }
+    public function getRating(): ?string
+    {
 
         return $this->getVariableValueByCode('kiyoh_averageRating');
     }
@@ -70,19 +62,17 @@ class Kiyoh implements ArgumentInterface
      * @return bool|string
      * @throws NoSuchEntityException
      */
-    public function getRatingPercentage(){
-        if(!$this->getVariableValueByCode('kiyoh_recommendation')){
-            return false;
-        }
-
+    public function getRatingPercentage(): ?string
+    {
         return $this->getVariableValueByCode('kiyoh_recommendation');
     }
 
     /**
-     * @return mixed
+     * @return string|null
      * @throws NoSuchEntityException
      */
-    public function getKiyohCustomerUrl(){
+    public function getKiyohCustomerUrl(): ?string
+    {
         return $this->storeManager->getStore()->getConfig(
             'kiyoh_settings/general/kiyoh_external_url'
         );
@@ -90,29 +80,28 @@ class Kiyoh implements ArgumentInterface
 
     /**
      * @param $code
-     * @return string
+     * @return string|null
      * @throws NoSuchEntityException
      */
-    public function getVariableValueByCode($code): string
+    public function getVariableValueByCode($code): ?string
     {
+        $customVariable = $this->variable->create()
+            ->setStoreId($this->storeManager->getStore()->getId())
+            ->loadByCode($code);
 
-        $customVariable = $this->variable->create()->setStoreId(
-            $this->storeManager->getStore()->getId()
-        )->loadByCode(
-            $code
-        );
+        return $customVariable instanceof VariableFactory
+            ? $customVariable->getValue()
+            : null;
 
-        if ($customVariable) {
-            return $customVariable->getValue();
-        }
-
-        return '';
     }
 
     /**
      * @return mixed
      */
-    public function isEnabled() {
-        return $this->scopeConfig->getValue('kiyoh_settings/general/enable', ScopeInterface::SCOPE_STORE);
+    public function isEnabled()
+    {
+        return $this->scopeConfig->getValue(
+            'kiyoh_settings/general/enable',
+            ScopeInterface::SCOPE_STORE);
     }
 }

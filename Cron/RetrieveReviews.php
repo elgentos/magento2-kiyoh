@@ -38,7 +38,7 @@ class RetrieveReviews {
     }
 
     /**
-     * @throws CronException|NoSuchEntityException
+     * @throws CronException
      */
     public function processAggregateScores(): void
     {
