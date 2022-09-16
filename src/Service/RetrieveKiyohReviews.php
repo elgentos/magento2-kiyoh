@@ -64,7 +64,12 @@ class RetrieveKiyohReviews {
             $this->curl->addHeader('X-Publication-Api-Token', $this->config->getApiKey((int) $store->getId()));
             $this->curl->get(sprintf(Config::PUBLICATION_URL, $this->config->getLocationId((int) $store->getId())));
 
-            $output = $this->serializer->unserialize($this->curl->getBody());
+            try {
+                $output = $this->serializer->unserialize($this->curl->getBody());
+            } catch (Exception $e) {
+                $errors[] = $e->getMessage();
+                continue;
+            }
 
             if (isset($output['errorCode'])) {
                 $errors[] =  __(
@@ -72,6 +77,7 @@ class RetrieveKiyohReviews {
                     $output['errorCode'],
                     $output['detailedError'][0]['message'] ?? null
                 );
+                continue;
             }
 
             try {

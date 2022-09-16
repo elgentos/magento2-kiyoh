@@ -9,6 +9,7 @@ use Magento\Framework\Console\Cli;
 use Magento\Framework\Exception\LocalizedException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\ConsoleOutputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class RetrieveReviews extends Command {
@@ -26,7 +27,7 @@ class RetrieveReviews extends Command {
         $this->service = $service;
     }
 
-    public function configure()
+    public function configure(): void
     {
         $this->setDescription(self::COMMAND_DESCRIPTION);
     }
@@ -36,7 +37,11 @@ class RetrieveReviews extends Command {
         try {
             $this->service->execute();
         } catch (LocalizedException $e) {
-            $output->write($e->getMessage());
+            $errorOutput = $output instanceof ConsoleOutputInterface
+                ? $output->getErrorOutput()
+                : $output;
+
+            $errorOutput->write($e->getMessage());
             return Cli::RETURN_FAILURE;
         }
 
