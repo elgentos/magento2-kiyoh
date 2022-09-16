@@ -14,34 +14,11 @@ use Elgentos\Kiyoh\Model\Config;
 
 class RetrieveReviews {
 
-    /**
-     * @var Curl
-     */
     private Curl $curl;
-
-    /**
-     * @var LoggerInterface
-     */
     private LoggerInterface $log;
-
-    /**
-     * @var Dom
-     */
     private Dom $converter;
-
-    /**
-     * @var VariableFactory
-     */
     private VariableFactory $variable;
-
-    /**
-     * @var Json
-     */
     private Json $jsonSerializer;
-
-    /**
-     * @var Config
-     */
     private Config $config;
 
     public function __construct(
@@ -75,7 +52,7 @@ class RetrieveReviews {
         }
 
         $this->curl->addHeader('X-Publication-Api-Token', $this->config->getApiKey());
-        $this->curl->get(config::PUBLICATION_URL . $this->config->getLocationId());
+        $this->curl->get(sprintf(Config::PUBLICATION_URL, $this->config->getLocationId()));
 
         $output = $this->curl->getBody();
         $jsonOutput = $this->jsonSerializer->unserialize($output);

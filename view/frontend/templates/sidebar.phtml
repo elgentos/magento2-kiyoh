@@ -4,13 +4,15 @@
  * See COPYING.txt for license details.
  */
 
+use Elgentos\Kiyoh\Model\Config;
+
 // @codingStandardsIgnoreFile
 
 ?>
 <?php
 if($this->getCorrectData()):
     $rating_percentage = $this->getRatingPercentage();
-    $maxrating = $this->getMaxrating();
+    $maxrating = Config::MAX_RATING;
     $url = $this->getMicrodataUrl();
     $rating = $this->getRating();
     $reviews = $this->getReviews();

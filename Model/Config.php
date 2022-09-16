@@ -7,9 +7,10 @@ use Magento\Store\Model\ScopeInterface;
 
 class Config {
 
-    private ScopeConfigInterface $scopeConfig;
+    public const PUBLICATION_URL = 'https://www.kiyoh.com/v1/publication/review/external/location/statistics?locationId=%d';
+    public const MAX_RATING = '10';
 
-    const PUBLICATION_URL = 'https://www.kiyoh.com/v1/publication/review/external/location/statistics?locationId=';
+    private ScopeConfigInterface $scopeConfig;
 
     public function __construct(
         ScopeConfigInterface $scopeConfig

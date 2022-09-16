@@ -15,27 +15,20 @@ use Magento\Variable\Model\VariableFactory;
  */
 class Kiyoh implements ArgumentInterface
 {
+    const MAX_RATING = '10';
 
-    /**
-     * @var ScopeInterface
-     */
-    private $storeManager;
+    private StoreManagerInterface $storeManager;
 
-    /**
-     * @var VariableFactory
-     */
     private VariableFactory $variable;
 
-    /**
-     * @var ScopeConfigInterface
-     */
     private ScopeConfigInterface $scopeConfig;
 
     /**
      * Kiyoh constructor.
      *
-     * @param StoreManagerInterface       $storeManager
-     * @param VariableFactory             $variableFactory
+     * @param StoreManagerInterface $storeManager
+     * @param VariableFactory $variableFactory
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
         StoreManagerInterface $storeManager,
@@ -94,15 +87,6 @@ class Kiyoh implements ArgumentInterface
             'kiyoh_settings/general/kiyoh_external_url'
         );
     }
-
-    /**
-     * @return int
-     */
-    public function getMaxRating(): int
-    {
-        return 10;
-    }
-
 
     /**
      * @param $code
