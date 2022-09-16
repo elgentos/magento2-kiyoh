@@ -32,19 +32,12 @@ class RetrieveReviews extends Command {
         $this->setDescription(self::COMMAND_DESCRIPTION);
     }
 
+    /**
+     * @throws LocalizedException
+     */
     public function execute(InputInterface $input, OutputInterface $output): int
     {
-        try {
-            $this->service->execute();
-        } catch (LocalizedException $e) {
-            $errorOutput = $output instanceof ConsoleOutputInterface
-                ? $output->getErrorOutput()
-                : $output;
-
-            $errorOutput->write($e->getMessage());
-            return Cli::RETURN_FAILURE;
-        }
-
+        $this->service->execute();
         return Cli::RETURN_SUCCESS;
     }
 
