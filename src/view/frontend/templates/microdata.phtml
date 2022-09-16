@@ -1,0 +1,44 @@
+<?php
+
+/**
+ * Copyright Elgentos. All rights reserved.
+ * https://www.elgentos.nl
+ */
+
+declare(strict_types=1);
+
+/**
+ * @var Template $block
+ * @var Escaper $escaper
+ */
+
+use Elgentos\Kiyoh\Model\Config;
+use Elgentos\Kiyoh\ViewModel\Kiyoh;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Kiyoh $kiyoh */
+$kiyoh = $block->getData('kiyoh_viewmodel');
+
+if ($kiyoh->getReviewCount() === 0 || !$kiyoh->isEnabled()) {
+    return;
+}
+?>
+<div class="kiyoh-shop-snippets">
+    <div class="overall-rating">
+        <span itemprop="ratingValue"><?= $escaper->escapeHtml($kiyoh->getRating()) ?></span>
+    </div>
+    <div class="rating-box">
+        <div class="rating" style="width:<?= $escaper->escapeHtmlAttr($kiyoh->getRatingPercentage()) ?>%"></div>
+    </div>
+    <div class="kiyoh-schema" itemscope="itemscope" itemtype="http://schema.org/WebPage">
+        <div itemprop="aggregateRating" itemscope="itemscope" itemtype="http://schema.org/AggregateRating">
+            <meta itemprop="bestRating" content="<?= $escaper->escapeHtmlAttr(Config::MAX_RATING) ?>">
+            <p>
+                <a href="<?= $escaper->escapeUrl($kiyoh->getKiyohCustomerUrl()) ?>" target="_blank" class="kiyoh-link">
+                    <span><?= $escaper->escapeHtml(__('%1 reviews', $kiyoh->getReviewCount())) ?></span>
+                </a>
+            </p>
+        </div>
+    </div>
+</div>
