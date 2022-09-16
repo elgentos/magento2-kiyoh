@@ -2,39 +2,32 @@
 
 namespace Elgentos\Kiyoh\Model;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Store\Model\StoreManagerInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class Config {
 
-    /**
-     * @var StoreManagerInterface
-     */
-    private StoreManagerInterface $storeManager;
+    private ScopeConfigInterface $scopeConfig;
 
     const PUBLICATION_URL = 'https://www.kiyoh.com/v1/publication/review/external/location/statistics?locationId=';
 
     public function __construct(
-        StoreManagerInterface $storeManager
+        ScopeConfigInterface $scopeConfig
     ) {
-        $this->storeManager = $storeManager;
+        $this->scopeConfig = $scopeConfig;
     }
 
-    /**
-     * @throws NoSuchEntityException
-     */
     public function getApiKey(): mixed {
-        return $this->storeManager->getStore()->getConfig(
-        'kiyoh_settings/general/api_key'
+        return $this->scopeConfig->getValue(
+            'kiyoh_settings/general/api_key',
+            ScopeInterface::SCOPE_STORE
         );
     }
 
-    /**
-     * @throws NoSuchEntityException
-     */
     public function getLocationId(): mixed {
-        return $this->storeManager->getStore()->getConfig(
-        'kiyoh_settings/general/location_id'
+        return $this->scopeConfig->getValue(
+            'kiyoh_settings/general/location_id',
+            ScopeInterface::SCOPE_STORE
         );
     }
 
