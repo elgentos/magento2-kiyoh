@@ -56,14 +56,14 @@ class Kiyoh implements ArgumentInterface
 
     public function getVariableValueByCode(string $code): ?string
     {
+
         try {
             $variable = $this->variable->create()
-                ->setStoreId($this->storeManager->getStore()->getId())
-                ->loadByCode($code);
+                ->setStoreId((int) $this->storeManager->getStore()->getId())
+                ->loadByCode((string) $code);
         } catch (NoSuchEntityException $e) {
             return null;
         }
-
         return $variable instanceof Variable
             ? $variable->getValue()
             : null;

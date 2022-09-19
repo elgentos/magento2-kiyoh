@@ -15,10 +15,16 @@ use Magento\Framework\HTTP\Client\Curl;
 use Magento\Variable\Model\ResourceModel\Variable as VariableResource;
 use Magento\Variable\Model\Variable;
 use Magento\Variable\Model\VariableFactory;
+use Magento\Store\Model\Store;
 
 class RetrieveKiyohReviews {
 
     private const RATING_CODES = ['numberReviews', 'averageRating', 'recommendation'];
+    private const DEFAULT_OUTPUT = [
+        'averageRating' => 0,
+        'numberReviews' => 0,
+        'recommendation' => 0,
+    ];
 
     private StoreManagerInterface $storeManager;
 
@@ -55,7 +61,17 @@ class RetrieveKiyohReviews {
     public function execute(): void {
         $errors = [];
 
-        foreach ($this->storeManager->getStores() as $store) {
+        foreach ($this->storeManager->getStores(true) as $store) {
+
+            if ((int) $store->getId() === Store::DEFAULT_STORE_ID) {
+                try {
+                    $this->saveToDb(self::DEFAULT_OUTPUT, $store);
+                } catch (Exception $e) {
+                    $errors[] = $e->getMessage();
+                }
+
+                continue;
+            }
 
             if (!$this->isEnabled($store)) {
                 continue;
