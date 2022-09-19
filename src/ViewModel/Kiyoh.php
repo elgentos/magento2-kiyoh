@@ -44,10 +44,16 @@ class Kiyoh implements ArgumentInterface
         return (float) $this->getVariableValueByCode('kiyoh_averageRating');
     }
 
-    public function getRatingPercentage(): float
+    public function getRecommendationPercentage(): float
     {
         return (float) $this->getVariableValueByCode('kiyoh_recommendation');
     }
+
+    public function getRatingPercentage(int $precision = 0): string
+    {
+        return number_format($this->getRating() * 10, $precision);
+    }
+
 
     public function getKiyohCustomerUrl(): string
     {
